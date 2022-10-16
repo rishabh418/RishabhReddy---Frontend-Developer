@@ -85,6 +85,12 @@ const SearchForm = () => {
    
     let pages = Math.ceil(items.length / perPage);
     setPages(pages);
+    document.getElementsByClassName("pagination")[0].childNodes[1].className = "active";
+    if(page !=0)
+    {
+        document.getElementsByClassName("pagination")[0].childNodes[page+1].className = "";
+    }
+   
     setPage(0);
 }
 

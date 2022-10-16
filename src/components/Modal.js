@@ -86,7 +86,7 @@ const Modal = (props) => ReactDOM.createPortal(
                             </td>
                         </tr>
                             {props.capsuleItem.missions.length !== 0 ? props.capsuleItem.missions.map((value) => {
-                                return (<tr><td key={value.name}>Name - {value.name}<br/>flight - {value.flight}</td></tr>)
+                                return (<tr key={value.name}><td>Name - {value.name}<br/>flight - {value.flight}</td></tr>)
                             }) : <tr><td>-</td></tr>}
 
 
