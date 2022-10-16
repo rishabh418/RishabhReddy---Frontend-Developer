@@ -85,13 +85,26 @@ const SearchForm = () => {
    
     let pages = Math.ceil(items.length / perPage);
     setPages(pages);
-    document.getElementsByClassName("pagination")[0].childNodes[1].className = "active";
-    if(page !=0)
+    
+    if(page!==0)
     {
         document.getElementsByClassName("pagination")[0].childNodes[page+1].className = "";
+        document.getElementsByClassName("pagination")[0].childNodes[1].className = "";
     }
-   
-    setPage(0);
+    if(pages === 1)
+    {
+        document.getElementsByClassName("pagination")[0].childNodes[0].className ="previous disabled";
+        document.getElementsByClassName("pagination")[0].childNodes[2].className ="next disabled";
+    }
+    else if(pages > 1)
+    {
+        document.getElementsByClassName("pagination")[0].childNodes[0].className ="previous disabled";
+    }
+   setPage(0);
+   if(page === 0)
+   {
+    document.getElementsByClassName("pagination")[0].childNodes[1].className = "active";
+   }
 }
 
 // hook to implement component did mount
