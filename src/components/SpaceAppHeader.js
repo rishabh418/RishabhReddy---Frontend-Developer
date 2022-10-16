@@ -1,13 +1,14 @@
-import React,{useState,useEffect} from 'react'
+import React from 'react'
 import './SpaceAppHeader.css'
 import background from "../images/Space.png";
 
+//App header details
 const SpaceAppHeader = () => {
     return (
       <div>
         <h1 style={{ color: 'black', textAlign: 'center' }}>Space X Capsules Application</h1>
         <section>
-          <img src={background} alt="no-image" width="50%" height="350px" />
+          <img src={background} alt="icon" width="50%" height="350px" />
           <article className='App-article'>
             <h2 style={{ color: 'black', textAlign: 'center' }}>We are the light that travels into space.</h2>
             <p style={{ textAlign: 'center' }}>

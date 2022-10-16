@@ -3,7 +3,8 @@
     flex-wrap: wrap;
   }
   .childContainer{
-    background-color: #f1f1f1;
+    /* background-color: #f1f1f1; */
+    background-color: lightgreen;
     width: 310px;
     margin: 15px;
     padding: 30px;
@@ -13,7 +14,7 @@
   }
   .pagination {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     list-style: none;
     margin-top: 20px;
     padding: 0;
@@ -47,3 +48,39 @@
     color: rgb(198, 197, 202);
     border: 1px solid rgb(198, 197, 202);
    }
+
+   input {
+    border: 2px solid;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin: 20px;
+    min-width: 125px;
+    padding: 0.5rem;
+    transition: border-color 0.5s ease-out;
+  }
+
+  .button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 20px;
+    cursor: pointer;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    color: black;
+  }
+  
+  tr:hover {background-color: coral;}

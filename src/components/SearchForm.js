@@ -6,57 +6,160 @@ import ReactPaginate from 'react-paginate';
 //search form
 const SearchForm = () => {
     const [status, setStatus] = useState("");
-    const [originalLaunch, setOriginalLaunch] = useState("");
+    const [capsuleSerial, setcapsuleSerial] = useState("");
     const [type, setType] = useState("");
     const [modal, setModal] = useState(false);
     const [capsuleItem, setCapsuleItem] = useState({});
     const [capsules, setCapsules] = useState([]);
     const [page, setPage] = useState(0);
-    const [perPage, setPerPage] = useState(6);
     const [pages, setPages] = useState(0);
-   
+    const [searchCapsules,setSearchCapsules]= useState([]);
+    var perPage=6;
+
+    // function to open modal
     const openModal = (capsuleItem) => {
         setModal(true);
         setCapsuleItem(capsuleItem);
     }
+
+    // function to close modal
     const closeModal = () => {
         setModal(false);
     }
-  const handlePageClick = (event) => {
-        let page = event.selected;
-        setPage(page);
 
+    //function to handle pagenation click
+  const handlePageClick = (event) => {
+     let page = event.selected;
+     setPage(page);
     }
-    // console.log(status,originalLaunch,type);
+
+    // on seach button click event
+  const onClickEvent = (event) =>{
+   
+    let items;
+   
+    if(status === "" && capsuleSerial === "" && type === "" )
+    {
+        items=searchCapsules;
+        setCapsules(searchCapsules);
+    }
+    else if(capsuleSerial !== "" )
+    {
+         items=searchCapsules.filter((item)=>item.capsule_serial.includes(capsuleSerial));
+        if(type !== null)
+        {
+            items=items !== []?items.filter((item)=>item.type.includes(type)):[];
+        }
+        else if(status !== null)
+        {
+            items=items !== []?items.filter((item)=>item.status.includes(status)):[];
+        }
+        setCapsules(items);
+    }
+    else if(status !== null )
+    {
+         items=searchCapsules.filter((item)=>item.status.includes(status));
+        if(type !== null)
+        {
+            items=items !== []?items.filter((item)=>item.type.includes(type)):[];
+        }
+        else if(capsuleSerial != null)
+        {
+            items=items !== []?items.filter((item)=>item.capsule_serial.includes(capsuleSerial)):[];
+        }
+        setCapsules(items);
+    }
+    else if(type !== null )
+    {
+         items=searchCapsules.filter((item)=>item.type.includes(type));
+        if(status !== null)
+        {
+            items= items !== []?items.filter((item)=>item.status.includes(status)):[];
+        }
+        else if(capsuleSerial !== null)
+        {
+            items=items !== []?items.filter((item)=>item.capsule_serial.includes(capsuleSerial)):[];
+        }
+        setCapsules(items);
+    }
+   
+    let pages = Math.ceil(items.length / perPage);
+    setPages(pages);
+    setPage(0);
+}
+
+// hook to implement component did mount
     useEffect(() => {
         fetch("https://api.spacexdata.com/v3/capsules").then(response =>
             response.json())
             .then((data) => {
                 setCapsules(data);
+                setSearchCapsules(data);
                let pages = Math.ceil(data.length / perPage);
                setPages(pages);
             });
     },[]);
     let items = capsules.slice(page * perPage, (page + 1) * perPage);
-     console.log(capsules);
+  
     return (
       
         <React.Fragment>
             <h1 style={{ textAlign: 'center' }}>Search Form</h1>
-            <input type="text" placeholder='status' onChange={(e) => { setStatus(e.target.value) }} />
-            <input type="text" placeholder='original_launch' onChange={(e) => { setOriginalLaunch(e.target.value) }} />
-            <input type="text" placeholder='type' onChange={(e) => { setType(e.target.value) }} />
+            <span style={{ padding: '20px' }}>Search filters :</span>
+            <input type="text" placeholder='Status' onChange={(e) => { setStatus(e.target.value) }} />
+            <input type="text" placeholder='Capsule Serial' onChange={(e) => { setcapsuleSerial(e.target.value) }} />
+            <input type="text" placeholder='Type' onChange={(e) => { setType(e.target.value) }} />
+            <button className='button' onClick={onClickEvent}>Search</button>
             {capsules.length !== 0 ? <div className='divContainer'>
                 {
                     items.map((value) => {
-                        // return(<GridData  key={value.capsule_serial} Capsule={value}/>)
+                        // display capsule items as grid
                         return (
                             <div className='childContainer' key={value.capsule_serial} onClick={() => openModal(value)}>
-                                <p>Capsule Id - {value.capsule_id} </p>
-                                <p>Capsule Serial - {value.capsule_serial} </p>
-                                <p>Type - {value.type} </p>
-                                <p>Original Launch - {value.original_launch}</p>
-                                <p>Status - {value.status} </p>
+                                <table>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                    Capsule Id 
+                                    </td>
+                                    <td>
+                                    {value.capsule_id}   
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    Capsule Serial
+                                    </td>
+                                    <td>
+                                    {value.capsule_serial}    
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    Type
+                                    </td>
+                                    <td>
+                                    {value.type}  
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    Landings
+                                    </td>
+                                    <td>
+                                    {value.landings}   
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    Status
+                                    </td>
+                                    <td>
+                                    {value.status}   
+                                    </td>
+                                </tr>
+                                </tbody>
+                                </table>
                             </div>
                         );
                     })}
@@ -64,14 +167,15 @@ const SearchForm = () => {
             {
                 modal === true ? <Modal capsuleItem={capsuleItem} closeModal={closeModal} /> : ""
             }
+            {capsules.length !== 0 ?
             <ReactPaginate
-                previousLabel={'prev'}
+               previousLabel={'prev'}
                 nextLabel={'next'}
                 pageCount={pages}
                 onPageChange={handlePageClick}
                 containerClassName={'pagination'}
                 activeClassName={'active'}
-            />
+            />:<p style={{color:"red",padding: '20px',textAlign:"center"}}>No results found</p>}
         </React.Fragment>
 
     )
